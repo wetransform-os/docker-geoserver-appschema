@@ -15,6 +15,8 @@ RUN chmod -R a+x /tmp/scripts
 
 ENV GEOSERVER_VERSION 2.8-RC1
 
+ENV GEOSERVER_DIR /usr/local/tomcat/webapps/geoserver
+
 # Fetch the geoserver zip file if it is not available locally in the resources dir
 RUN if [ ! -f /tmp/resources/geoserver.zip ]; then \
     wget -c http://ares.boundlessgeo.com/geoserver/release/${GEOSERVER_VERSION}/geoserver-${GEOSERVER_VERSION}-war.zip -O /tmp/resources/geoserver.zip; \
@@ -28,8 +30,12 @@ RUN if [ ! -f /tmp/resources/app-schema-plugin.zip ]; then \
     wget -c http://ares.boundlessgeo.com/geoserver/release/${GEOSERVER_VERSION}/plugins/geoserver-${GEOSERVER_VERSION}-app-schema-plugin.zip -O /tmp/resources/app-schema-plugin.zip; \
     fi; \
     mkdir /tmp/resources/app-schema && cd /tmp/resources/app-schema && unzip ../app-schema-plugin.zip; \
-    mv -v *.jar /usr/local/tomcat/webapps/geoserver/WEB-INF/lib; \
+    mv -v *.jar ${GEOSERVER_DIR}/WEB-INF/lib; \
     rm -rf /tmp/resources/app-schema;
+
+# delete default workspaces
+RUN rm -rf ${GEOSERVER_DIR}/data/workspaces && mkdir ${GEOSERVER_DIR}/data/workspaces; \
+    rm -rf ${GEOSERVER_DIR}/data/layergroups/*
 
 # Run setup script to apply initial settings
 RUN /tmp/scripts/setup.groovy /usr/local/tomcat/webapps/geoserver/

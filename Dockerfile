@@ -1,14 +1,17 @@
 #--------- Generic stuff --------------------------------------------------------------------
 FROM tomcat:6.0
-MAINTAINER Stefano Costa <stefano.costa@geo-solutions.it>
+MAINTAINER Simon Templer <simon@wetransform.to>
 
 RUN apt-get -y update
 
 #-------------Application Specific Stuff ----------------------------------------------------
 
-RUN apt-get -y install unzip
+RUN apt-get -y install unzip groovy2
 
 ADD resources /tmp/resources
+
+ADD scripts /tmp/scripts
+RUN chmod -R a+x /tmp/scripts
 
 # Fetch the geoserver zip file if it is not available locally in the resources dir
 RUN if [ ! -f /tmp/resources/geoserver.zip ]; then \
@@ -25,6 +28,9 @@ RUN if [ ! -f /tmp/resources/app-schema-plugin.zip ]; then \
     mkdir /tmp/resources/app-schema && cd /tmp/resources/app-schema && unzip ../app-schema-plugin.zip; \
     mv -v *.jar /usr/local/tomcat/webapps/geoserver/WEB-INF/lib; \
     rm -rf /tmp/resources/app-schema;
+
+# Run setup script to apply initial settings
+RUN /tmp/scripts/setup.groovy /usr/local/tomcat/webapps/geoserver/
 
 EXPOSE 8080
 CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]

@@ -14,7 +14,7 @@ docker run -it -p 8080:8080 -v /data/dir/on/host:/opt/webapps/geoserver/data wet
 `GS_ADMIN_PASSWORD`
 `GS_MASTER_PASSWORD`
 
-These variables can be used to conveniently set administrator and master passwords to replace the default ones if you do not use a custom data directory but don't want to use the default passwords (e.g. in publicly accessible test environments). Passwords are expected to provided as
+These variables can be used to conveniently set administrator and master passwords if you do not use a custom data directory but don't want to use the default passwords (e.g. in publicly accessible test environments). Passwords are expected to provided as
 
 * GeoServer digest encrypted password (`digest1:hashedPasswordAndSalt`) **recommended**
 * GeoServer plain text password (`plain:password`)

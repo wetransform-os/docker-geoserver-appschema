@@ -10,9 +10,6 @@ RUN apt-get -y install unzip groovy2
 
 ADD resources /tmp/resources
 
-ADD scripts /tmp/scripts
-RUN chmod -R a+x /tmp/scripts
-
 ENV GEOSERVER_VERSION 2.8-RC1
 
 ENV GEOSERVER_DIR /usr/local/tomcat/webapps/geoserver
@@ -37,8 +34,11 @@ RUN if [ ! -f /tmp/resources/app-schema-plugin.zip ]; then \
 RUN rm -rf ${GEOSERVER_DIR}/data/workspaces && mkdir ${GEOSERVER_DIR}/data/workspaces; \
     rm -rf ${GEOSERVER_DIR}/data/layergroups/*
 
+ADD scripts /tmp/scripts
+RUN chmod -R a+x /tmp/scripts
+
 # Run setup script to apply initial settings
-RUN /tmp/scripts/setup.groovy /usr/local/tomcat/webapps/geoserver/
+RUN /tmp/scripts/setup.groovy ${GEOSERVER_DIR}
 
 EXPOSE 8080
-CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]
+CMD ["/tmp/scripts/launch.sh"]

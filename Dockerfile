@@ -12,14 +12,15 @@ ADD resources /tmp/resources
 
 ENV GEOSERVER_VERSION 2.8-RC1
 
-ENV GEOSERVER_DIR /usr/local/tomcat/webapps/geoserver
+ENV GEOSERVER_DIR /opt/webapps/geoserver
+ENV TOMCAT_DIR /usr/local/tomcat
 
 # Fetch the geoserver zip file if it is not available locally in the resources dir
 RUN if [ ! -f /tmp/resources/geoserver.zip ]; then \
     wget -c http://ares.boundlessgeo.com/geoserver/release/${GEOSERVER_VERSION}/geoserver-${GEOSERVER_VERSION}-war.zip -O /tmp/resources/geoserver.zip; \
     fi; \
     mkdir /tmp/resources/geoserver && cd /tmp/resources/geoserver && unzip ../geoserver.zip; \
-    mv -v geoserver.war /usr/local/tomcat/webapps && mkdir /usr/local/tomcat/webapps/geoserver && cd /usr/local/tomcat/webapps/geoserver && unzip ../geoserver.war; \
+    mkdir /opt/webapps && mv -v geoserver.war /opt/webapps && mkdir ${GEOSERVER_DIR} && cd ${GEOSERVER_DIR} && unzip ../geoserver.war; \
     rm -rf /tmp/resources/geoserver;
 
 # Fetch the geoserver app-schema plugin zip file if it is not available locally in the resources dir
@@ -33,6 +34,8 @@ RUN if [ ! -f /tmp/resources/app-schema-plugin.zip ]; then \
 # delete default workspaces
 RUN rm -rf ${GEOSERVER_DIR}/data/workspaces && mkdir ${GEOSERVER_DIR}/data/workspaces; \
     rm -rf ${GEOSERVER_DIR}/data/layergroups/*
+
+COPY ./ROOT.xml ${TOMCAT_DIR}/conf/Catalina/localhost/ROOT.xml
 
 ADD scripts /tmp/scripts
 RUN chmod -R a+x /tmp/scripts

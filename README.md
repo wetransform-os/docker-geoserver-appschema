@@ -27,3 +27,5 @@ Example call:
 ```
 docker run -it -p 8080:8080 -e GS_ADMIN_PASSWORD=mysecretpassword wetransform/geoserver-appschema
 ```
+
+*Tip:* To create a GeoServer digest encrypted password use the provided script `gsdigest.groovy <password>` - it will print the prefix and the encrypted password to standard out.

@@ -9,6 +9,16 @@ Example of mounting a GeoServer data directory present on the Docker host:
 docker run -it -p 8080:8080 -v /data/dir/on/host:/opt/webapps/geoserver/data wetransform/geoserver-appschema
 ```
 
+## Waiting for the database
+
+When running the image it will automatically wait for the database connection to a default PostGIS database being ready before starting GeoServer. This applies if you link a database container to this image as "db" with PostGIS default port 5432, for example:
+
+```
+docker run -it -p 8080:8080 --link mydbcontainer:db wetransform/geoserver-appschema
+```
+
+`mydbcontainer` in this case should be a PostGIS container with port 5432 exposed.
+
 ## Environment variables
 
 `GS_ADMIN_PASSWORD`

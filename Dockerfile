@@ -10,14 +10,15 @@ RUN apt-get -y install unzip groovy2
 
 ADD resources /tmp/resources
 
-ENV GEOSERVER_VERSION 2.8.1
+ENV GEOSERVER_VERSION 2.8.x
+ENV PLUGIN_VERSION 2.8-SNAPSHOT
 
 ENV GEOSERVER_DIR /opt/webapps/geoserver
 ENV TOMCAT_DIR /usr/local/tomcat
 
 # Fetch the geoserver zip file if it is not available locally in the resources dir
 RUN if [ ! -f /tmp/resources/geoserver.zip ]; then \
-    wget -c http://ares.boundlessgeo.com/geoserver/release/${GEOSERVER_VERSION}/geoserver-${GEOSERVER_VERSION}-war.zip -O /tmp/resources/geoserver.zip; \
+    wget -c http://ares.boundlessgeo.com/geoserver/${GEOSERVER_VERSION}/geoserver-${GEOSERVER_VERSION}-latest-war.zip -O /tmp/resources/geoserver.zip; \
     fi; \
     mkdir /tmp/resources/geoserver && cd /tmp/resources/geoserver && unzip ../geoserver.zip; \
     mkdir /opt/webapps && mv -v geoserver.war /opt/webapps && mkdir ${GEOSERVER_DIR} && cd ${GEOSERVER_DIR} && unzip ../geoserver.war; \
@@ -25,7 +26,7 @@ RUN if [ ! -f /tmp/resources/geoserver.zip ]; then \
 
 # Fetch the geoserver app-schema plugin zip file if it is not available locally in the resources dir
 RUN if [ ! -f /tmp/resources/app-schema-plugin.zip ]; then \
-    wget -c http://ares.boundlessgeo.com/geoserver/release/${GEOSERVER_VERSION}/plugins/geoserver-${GEOSERVER_VERSION}-app-schema-plugin.zip -O /tmp/resources/app-schema-plugin.zip; \
+    wget -c http://ares.boundlessgeo.com/geoserver/${GEOSERVER_VERSION}/ext-latest/geoserver-${PLUGIN_VERSION}-app-schema-plugin.zip -O /tmp/resources/app-schema-plugin.zip; \
     fi; \
     mkdir /tmp/resources/app-schema && cd /tmp/resources/app-schema && unzip ../app-schema-plugin.zip; \
     mv -v *.jar ${GEOSERVER_DIR}/WEB-INF/lib; \

@@ -2,7 +2,7 @@
 
 [![Docker Hub Badge](https://img.shields.io/badge/Docker-Hub%20Hosted-blue.svg)](https://hub.docker.com/r/wetransform/geoserver-appschema/)
 
-Simple Dockerfile to build an image running GeoServer (plus app-schema extension) on Tomcat 6 and JRE 7.
+Simple Dockerfile to build an image running GeoServer (plus app-schema extension) on Tomcat 8 and JRE 8.
 
 ## Configuration from host
 

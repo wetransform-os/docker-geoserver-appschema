@@ -1,5 +1,5 @@
 #--------- Generic stuff --------------------------------------------------------------------
-FROM tomcat:6.0
+FROM tomcat:8-jre8
 MAINTAINER Simon Templer <simon@wetransform.to>
 
 RUN apt-get -y update
@@ -10,7 +10,7 @@ RUN apt-get -y install unzip groovy2
 
 ADD resources /tmp/resources
 
-ENV GEOSERVER_VERSION 2.8.1
+ENV GEOSERVER_VERSION 2.9.1
 
 ENV GEOSERVER_DIR /opt/webapps/geoserver
 ENV TOMCAT_DIR /usr/local/tomcat

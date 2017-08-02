@@ -11,6 +11,7 @@ RUN apt-get -y install unzip groovy2
 ADD resources /tmp/resources
 
 ENV GEOSERVER_VERSION 2.12
+ENV MONGO_PLUGIN_URL https://wetransform.box.com/shared/static/yclc1n6cfcqellbpzyl7k5h5k0wde1lu.zip
 
 ENV GEOSERVER_DIR /opt/webapps/geoserver
 ENV TOMCAT_DIR /usr/local/tomcat
@@ -30,6 +31,14 @@ RUN if [ ! -f /tmp/resources/app-schema-plugin.zip ]; then \
     mkdir /tmp/resources/app-schema && cd /tmp/resources/app-schema && unzip ../app-schema-plugin.zip; \
     mv -v *.jar ${GEOSERVER_DIR}/WEB-INF/lib; \
     rm -rf /tmp/resources/app-schema;
+
+# Fetch MongoDB plugin
+RUN if [ ! -f /tmp/resources/gs-mongodb.zip ]; then \
+    wget -c ${MONGO_PLUGIN_URL} -O /tmp/resources/gs-mongodb.zip; \
+    fi; \
+    mkdir /tmp/resources/gs-mongodb && cd /tmp/resources/gs-mongodb && unzip ../gs-mongodb.zip; \
+    mv -v *.jar ${GEOSERVER_DIR}/WEB-INF/lib; \
+    rm -rf /tmp/resources/gs-mongodb;
 
 # delete default workspaces
 RUN rm -rf ${GEOSERVER_DIR}/data/workspaces && mkdir ${GEOSERVER_DIR}/data/workspaces; \
